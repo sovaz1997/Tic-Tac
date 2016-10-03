@@ -46,9 +46,14 @@ int Game::startGame() {
   if(you == 0) {
     you = -1;
   }
-  board.print();
+
+  if(you == 1) {
+    board.print();
+  }
+
   while(num_moves <= SIZE * SIZE) {
     if(you == 1) {
+
       std::cout << "Введите номер клетки (1-" << SIZE*SIZE << "): ";
       std::cin >> pos;
       --pos;
@@ -56,6 +61,8 @@ int Game::startGame() {
       while(!board.testOfLegalMove(move)) {
         std::cout << "Введите номер клетки (1-" << SIZE*SIZE << "): ";
         std::cin >> pos;
+        --pos;
+        move = Move(board.crossMove, pos / SIZE, pos % SIZE);
       }
       board.go(move);
       ++num_moves;
