@@ -6,8 +6,8 @@ Game::Game() {
 Game::~Game() {}
 
 double Game::minimax(Board b, int depth) {
-  if(b.evalute() != 0 || depth >= 9) {
-    return b.evalute() / depth;
+  if(b.isTerminate()) {
+    return b.evalute();
   }
 
   double max = -INFINITY;
@@ -19,12 +19,12 @@ double Game::minimax(Board b, int depth) {
   for(unsigned int i = 0; i < moves.size(); ++i) {
     b.go(moves[i]);
     double tmp = -minimax(b, depth + 1);
+    b = saved;
 
     if(tmp > max) {
       max = tmp;
       local_move = moves[i];
     }
-    b = saved;
   }
 
   if(depth == 0) {
@@ -37,8 +37,6 @@ double Game::minimax(Board b, int depth) {
 }
 
 int Game::startGame() {
-  board.print();
-
   int pos;
   int num_moves = 0;
 
@@ -48,14 +46,15 @@ int Game::startGame() {
   if(you == 0) {
     you = -1;
   }
-  while(num_moves <= 9) {
+  board.print();
+  while(num_moves <= SIZE * SIZE) {
     if(you == 1) {
-      std::cout << "Введите номер клетки (1-9): ";
+      std::cout << "Введите номер клетки (1-" << SIZE*SIZE << "): ";
       std::cin >> pos;
       --pos;
       Move move = Move(board.crossMove, pos / SIZE, pos % SIZE);
       while(!board.testOfLegalMove(move)) {
-        std::cout << "Введите номер клетки (1-9): ";
+        std::cout << "Введите номер клетки (1-" << SIZE*SIZE << "): ";
         std::cin >> pos;
       }
       board.go(move);

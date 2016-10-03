@@ -22,7 +22,8 @@ public:
   void go(Move& mv);
   void print();
   bool testOfLegalMove(Move& mv);
-  
+  bool isTerminate();
+
   bool crossMove = true;
 };
 
